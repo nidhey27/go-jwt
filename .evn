@@ -1,0 +1,2 @@
+PORT=3000
+DB_URL="host=mouse.db.elephantsql.com user=xzfapyeo password=Al1GhnCfoLOi43hHBtl8bKsf-03RgEFd dbname=xzfapyeo port=5432 sslmode=disable"
