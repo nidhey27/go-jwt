@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 
@@ -115,7 +116,8 @@ func Login(c *gin.Context) {
 		"exp":   time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
 
-	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	fmt.Println(os.Getenv("JWT_SECRET"))
+	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -127,8 +129,12 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	// NOT WORKING
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", true, true)
+	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
+	// NOT WORKING
+
+	// c.Header("Authorization", tokenString)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  true,
 		"message": "Login Successful!",
@@ -136,4 +142,13 @@ func Login(c *gin.Context) {
 		"data":    make([]string, 0),
 	})
 
+}
+
+func Validate(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"status":  true,
+		"message": "Authorized",
+		"error":   "",
+		"data":    make([]string, 0),
+	})
 }
